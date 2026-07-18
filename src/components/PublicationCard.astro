@@ -1,0 +1,59 @@
+---
+import { siteConfig, type Publication } from "@/data/site";
+
+type Props = {
+  publication: Publication;
+};
+
+const { publication } = Astro.props;
+---
+
+<article class="grid items-center gap-[22px] border-b border-[color:var(--border)] py-4 last:border-b-0 last:pb-0 md:grid-cols-[250px_1fr]">
+  <div class="flex h-[210px] w-full items-center justify-center overflow-hidden rounded-[18px] border border-[color:var(--border)] bg-white shadow-soft md:h-[150px] md:w-[250px]">
+    <img
+      src={publication.cover}
+      alt={`Cover of ${publication.title}`}
+      loading="lazy"
+      class="h-full w-full bg-white object-contain p-2"
+    />
+  </div>
+  <div>
+    <h3 class="text-[17px] font-bold leading-snug tracking-tight text-[color:var(--text)]">
+      {publication.title}
+    </h3>
+    <p class="mt-1 text-[14.5px] text-[color:var(--muted)]">
+      {
+        publication.authors.map((author, index) => (
+          <>
+            {author === siteConfig.name ? (
+              <span class="font-bold text-[color:var(--text)]">{author}</span>
+            ) : (
+              author
+            )}{index < publication.authors.length - 1 ? ", " : ""}
+          </>
+        ))
+      }
+    </p>
+    <p class="mb-1 mt-1.5 text-[14.8px] text-[color:var(--body)]">
+      <span class="font-bold text-[color:var(--text)]">Highlight:</span>
+      {publication.highlight}
+    </p>
+    <p class="text-[15px] text-[color:var(--muted)]">{publication.venue}</p>
+    {publication.doi && <p class="text-[15px] text-[color:var(--muted)]">DOI: {publication.doi}</p>}
+    {
+      publication.links && (
+        <div class="mt-[7px] flex flex-wrap gap-[7px]">
+          {publication.links.journal && (
+            <a class="mini-link" href={publication.links.journal} target="_blank" rel="noopener">Journal</a>
+          )}
+          {publication.links.blog && (
+            <a class="mini-link" href={publication.links.blog} target="_blank" rel="noopener">Blog Article</a>
+          )}
+        </div>
+      )
+    }
+    <div class="mt-[7px] flex flex-wrap gap-[7px]">
+      {publication.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+    </div>
+  </div>
+</article>

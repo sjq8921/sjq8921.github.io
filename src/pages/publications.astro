@@ -1,0 +1,16 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicationCard from "@/components/PublicationCard.astro";
+import { publications } from "@/data/site";
+---
+
+<BaseLayout title="Publications" description="Selected publications of Sun JingQi.">
+  <div class="container-page py-9">
+    <section class="apple-card">
+      <h1 class="mb-5 text-[28px] font-extrabold tracking-[-0.03em] text-[color:var(--text)] md:text-[34px]">
+        Selected Publications
+      </h1>
+      {publications.map((publication) => <PublicationCard publication={publication} />)}
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TagPill from "@/components/TagPill.astro";
+import { formatDate } from "@/data/format";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog" description="Blog posts by Sun JingQi." lang="zh-CN">
+  <div class="container-page py-9">
+    <section class="apple-card">
+      <h1 class="mb-5 border-b border-[color:var(--border)] pb-3 text-[25px] font-bold tracking-[-0.025em] text-[color:var(--text)]">
+        Blog
+      </h1>
+      {
+        posts.length > 0 ? (
+          <div class="grid gap-1">
+            {posts.map((post) => (
+              <article class="border-b border-[color:var(--border)] py-4 last:border-b-0 last:pb-0">
+                <a href={`/blog/${post.id}/`} class="group block">
+                  <h2 class="text-[18px] font-bold tracking-tight text-[color:var(--text)] transition-colors group-hover:text-[color:var(--primary)]">
+                    {post.data.title}
+                  </h2>
+                </a>
+                <p class="mt-1 text-sm text-[color:var(--muted)]">
+                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                </p>
+                <p class="mt-1.5 text-[15px] leading-relaxed text-[color:var(--body)]">
+                  {post.data.description}
+                </p>
+                {post.data.tags.length > 0 && (
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {post.data.tags.map((tag) => (
+                      <TagPill label={tag} />
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="text-[color:var(--muted)]">还没有文章。</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

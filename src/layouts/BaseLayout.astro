@@ -1,0 +1,46 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import "@/styles/global.css";
+import { siteConfig } from "@/data/site";
+
+type Props = {
+  title?: string;
+  description?: string;
+  lang?: string;
+};
+
+const { title, description = siteConfig.description, lang = "en" } = Astro.props;
+const pageTitle = title ? `${title} · ${siteConfig.name}` : `${siteConfig.name} | Academic Homepage`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5f5f7" />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (() => {
+        const key = "sjq-theme";
+        const saved = localStorage.getItem(key);
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = saved ? saved === "dark" : prefersDark;
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[color:var(--surface)] focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-[color:var(--text)] focus:shadow-card">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
